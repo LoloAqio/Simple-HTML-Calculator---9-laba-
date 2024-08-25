@@ -1,0 +1,117 @@
+<html>
+<html lang="ru" >
+<head>
+  <meta charset="UTF-8">
+  <title>Простой калькулятор</title>
+  <link rel="stylesheet" href="9style.css">
+  <script>
+
+    let lastOperatorButton = null;
+    let currentValue = '';
+    let storedValue = null;
+    let lastOperator = null;
+
+    function updateDisplay(value, element) {
+
+        const display = document.getElementById('display');
+        
+        if (value === '+' || value === '-' || value === '*' || value === '/') {
+            if (storedValue !== null && lastOperator !== null) {
+                calculateResult();
+            }
+            storedValue = parseFloat(currentValue);
+            currentValue = '';
+            lastOperator = value;
+
+            if (lastOperatorButton) {
+                lastOperatorButton.classList.remove('active-operator');
+            }
+
+            if (element) {
+                element.classList.add('active-operator');
+                lastOperatorButton = element;
+            }
+        } 
+        else {
+            currentValue += value;
+            display.value = currentValue;
+        }
+    }
+
+    function clearDisplay() {
+        document.getElementById('display').value = '';
+        currentValue = '';
+        storedValue = null;
+        lastOperator = null;
+        if (lastOperatorButton) {
+            lastOperatorButton.classList.remove('active-operator');
+            lastOperatorButton = null;
+        }
+    }
+    
+    function calculateResult() {
+        if (storedValue !== null && lastOperator !== null && currentValue !== '') {
+            const display = document.getElementById('display');
+            let result;
+
+            const num1 = storedValue;
+            const num2 = parseFloat(currentValue);
+
+            switch (lastOperator) {
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    result = num1 / num2;
+                    break;
+            }
+
+            display.value = result;
+            currentValue = result.toString();
+            storedValue = null;
+            lastOperator = null;
+
+            if (lastOperatorButton) {
+                lastOperatorButton.classList.remove('active-operator');
+                lastOperatorButton = null;
+            }
+        }
+    }
+
+  </script>
+</head>
+<body>
+    <div class="container">
+        <fieldset id="container">
+          <form name="calculator">
+            <input id="display" type="text" name="display" readonly>
+            <input class="button digits" type="button" value="7" onclick="updateDisplay('7')">
+            <input class="button digits" type="button" value="8" onclick="updateDisplay('8')">
+            <input class="button digits" type="button" value="9" onclick="updateDisplay('9')">
+            <input class="button mathButtons" type="button" value="+" onclick="updateDisplay('+', this)">
+            <br />
+            <input class="button digits" type="button" value="4" onclick="updateDisplay('4')">
+            <input class="button digits" type="button" value="5" onclick="updateDisplay('5')">
+            <input class="button digits" type="button" value="6" onclick="updateDisplay('6')">
+            <input class="button mathButtons" type="button" value="-" onclick="updateDisplay('-', this)">
+            <br />
+            <input class="button digits" type="button" value="1" onclick="updateDisplay('1')">
+            <input class="button digits" type="button" value="2" onclick="updateDisplay('2')">
+            <input class="button digits" type="button" value="3" onclick="updateDisplay('3')">
+            <input class="button mathButtons" type="button" value="x" onclick="updateDisplay('*', this)">
+            <br />
+            <input id="clearButton" class="button" type="button" value="C" onclick="clearDisplay()">
+            <input class="button digits" type="button" value="0" onclick="updateDisplay('0')">
+            <input class="button mathButtons" type="button" value="=" onclick="calculateResult()">
+            <input class="button mathButtons" type="button" value="/" onclick="updateDisplay('/', this)">
+          </form>
+        </fieldset>
+    </div>
+</body>
+</html>
